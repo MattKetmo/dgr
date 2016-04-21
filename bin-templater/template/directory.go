@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 	txttmpl "text/template"
+	"github.com/leekchan/gtf"
 )
 
 type TemplateDir struct {
@@ -51,9 +52,9 @@ func (t *TemplateDir) LoadPartial() error {
 	var tmpl *txttmpl.Template
 	for _, partial := range partials {
 		if tmpl == nil {
-			tmpl = txttmpl.New(partial)
+			tmpl = txttmpl.New(partial).Funcs(TemplateFunctions).Funcs(map[string]interface{}(gtf.GtfFuncMap))
 		} else {
-			tmpl = tmpl.New(partial)
+			tmpl = tmpl.New(partial).Funcs(TemplateFunctions).Funcs(map[string]interface{}(gtf.GtfFuncMap))
 		}
 
 		content, err := ioutil.ReadFile(partial)
